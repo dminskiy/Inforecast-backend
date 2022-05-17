@@ -23,3 +23,4 @@ class DataCell(DataColumn):
 
     def type(self):
         return self._dtype
+

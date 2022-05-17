@@ -1,4 +1,4 @@
-from WorkPackage import WPFamilyProperties, WorkPackageProperties, WorkPackage
+from other_test_scripts.WorkPackage import WPFamilyProperties, WorkPackageProperties, WorkPackage
 from DatabaseHandler import Table
 import datetime
 
