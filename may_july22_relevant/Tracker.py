@@ -4,7 +4,7 @@ import datetime
 import pandas as pd
 
 from pre_may22.DataStructsHandler import DataCell
-from DatabaseHandler import Table
+from Table import Table
 
 
 class PropertiesPackage:

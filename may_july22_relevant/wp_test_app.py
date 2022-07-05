@@ -1,5 +1,5 @@
 from other_test_scripts.WorkPackage import WPFamilyProperties, WorkPackageProperties, WorkPackage
-from DatabaseHandler import Table
+from Table import Table
 import datetime
 
 

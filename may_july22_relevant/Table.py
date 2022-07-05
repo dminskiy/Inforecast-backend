@@ -51,11 +51,39 @@ class Table:
 
         self._table = pd.concat([self._table, row_df], ignore_index=False)
 
-    def columns(self):
+    def get_column_list(self):
         return self._cols_list
 
-    def index(self):
+    def get_index_name(self):
         return self._table.index
 
-    def get_value_from_index(self, indx: str, col: str):
+    def get_value(self, indx, col: str):
         return self._table.at[indx, col]
+
+    def set_value(self, indx, col: str, val):
+        self._table.at[indx, col] = val
+
+
+if __name__ == '__main__':
+    from random import randint
+
+    cols = ['col1', 'col2', 'col3', 'col4']
+
+    rows = []
+    for i in range(10):
+        row = {}
+        row['ind'] = i
+        for col in cols:
+            row[col] = randint(0, 10000)
+        rows.append(row)
+
+    table = Table()
+    cols += ['ind']
+    table.create_table(columns=cols, index='ind')
+
+    for row in rows:
+        table.insert_row(row)
+
+    table.set_value(indx=5, col='col2', val='CHANGED')
+
+    table.save_table(table_path='../test_dir', table_name='DataHandler_test_table.csv')
