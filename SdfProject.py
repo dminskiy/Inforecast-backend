@@ -93,13 +93,15 @@ class SdfProject:
 # TODO: Test normalisation
 # TODO: Add RIBA stages and Dev Types
 # TODO: Add KPI name
+# TODO: Add min applicability score to kpi, i.e KPIs below this score will be marked as unapplicable
+# TODO: Add selectable normaliation strategy to kpi
 
 if __name__ == '__main__':
     TEST_KPI_NUMBER = False
     TEST_KPI_NUMBERS_SET = False
-    TEST_QUIZ = True
+    TEST_QUIZ = False
     TEST_CHECKBOXES = False
-    TEST_BINARY = False
+    TEST_BINARY = True
 
     project = SdfProject(riba_stage=RibaStages.FIVE, dev_type=DevelopmentTypes.COMMERCIAL)
     kpis2test = []
@@ -153,13 +155,86 @@ if __name__ == '__main__':
         kpis2test.append(new_kpi)
 
     if TEST_QUIZ:
-        pass
+        new_kpi = {
+            'identifier': 'VP3',
+            'riba_stages': [RibaStages.ONE, RibaStages.TWO, RibaStages.THREE, RibaStages.FOUR, RibaStages.FIVE,
+                            RibaStages.SIX],
+            'dev_types': [DevelopmentTypes.RESIDENTIAL, DevelopmentTypes.COMMERCIAL, DevelopmentTypes.MASTERPLAN],
+            'type': KpiTypes.QUIZ,
+            'input': {
+                'questions': {'Near my home, the space outside the front door can be seen by neighbours, making '
+                              'it feel safe to play or hang out there': {'red': 0, 'orange': 1, 'green': 2,
+                                                                         'reply': 'orange'},
+                              'Near my home, there are spaces where I can play sports and be active, either alone or '
+                              'in a group': {'red': 0, 'orange': 1, 'green': 2, 'reply': 'red'},
+                              'Near my home, motor vehicles are not dominating the space. For example, cars or '
+                              'motorbikes are not taking up a lot of room with parking': {'red': 0, 'orange': 1,
+                                                                                          'green': 2,  'reply': 'green'},
+                              'Near my home, motor vehicles are not moving too fast through this space. For example, '
+                              'there are traffic calming measures to slow down vehicles here': {'red': 0, 'orange': 1,
+                                                                                                'green': 2,
+                                                                                                'reply': 'green'},
+                              'Near my home, the shared spaces are big enough for a number of people to use and to '
+                              'support a range of activities such as scooting, skateboarding, hanging out, '
+                              'playing different games and socialising': {'red': 0, 'orange': 1, 'green': 2,
+                                                                          'reply': 'green'},
+
+                              }
+            },
+            'gp': 36,
+            'lp': 60,
+            'upper_bound': 60,
+            'lower_bound': 0,
+            'reporting_only': False
+        }
+
+        kpis2test.append(new_kpi)
 
     if TEST_CHECKBOXES:
-        pass
+        new_kpi = {
+            'identifier': 'LC1',
+            'riba_stages': [RibaStages.ONE, RibaStages.TWO, RibaStages.FOUR, RibaStages.FIVE, RibaStages.SIX],
+            'dev_types': [DevelopmentTypes.RESIDENTIAL, DevelopmentTypes.COMMERCIAL, DevelopmentTypes.MASTERPLAN],
+            'type': KpiTypes.CHECKBOXES,
+            'input': {
+                'questions': {'Have you performed the commission study?': {'yes': 1, 'no': -4, 'reply': 'no'}, # Use -4 for applicability if total score < 0 => not applicable
+                              'Will the meanwhile use be delivered in the site area(s)?': {'yes': 1, 'no': 0,
+                                                                                           'reply': 'yes'},
+                              'Would it be appropriate for some aspects of the meanwhile use to become a permanent '
+                              'part of the new development?': {'yes': 1, 'no': 0,
+                                                               'reply': 'yes'}
+                              }
+            },
+            'gp': 2,
+            'lp': 3,
+            'upper_bound': 3,
+            'lower_bound': 0,
+            'reporting_only': False
+        }
+
+        kpis2test.append(new_kpi)
 
     if TEST_BINARY:
-        pass
+        new_kpi = {
+            'identifier': 'LC3',
+            'riba_stages': [RibaStages.ONE, RibaStages.TWO, RibaStages.FIVE, RibaStages.SIX],
+            'dev_types': [DevelopmentTypes.RESIDENTIAL, DevelopmentTypes.COMMERCIAL, DevelopmentTypes.MASTERPLAN],
+            'type': KpiTypes.BINARY,
+            'input': {
+                'questions': {'Have you liaised with the local authority and provided new community infrastructure in '
+                              'response to the needs of the baseline report of community infrastructure needs, '
+                              'taking on board the impact of the future development?': {'yes': 1, 'no': 0,
+                                                                                        'reply': 'yes'},
+                              }
+            },
+            'gp': 1,
+            'lp': 1,
+            'upper_bound': 1,
+            'lower_bound': 0,
+            'reporting_only': False
+        }
+
+        kpis2test.append(new_kpi)
 
     for _kpi in kpis2test:
         project.add_kpi(kpi_identifier=_kpi['identifier'],

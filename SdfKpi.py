@@ -68,16 +68,18 @@ class SdfKpiInput:
                             }
             '''
             assert 'questions' in self._input_args
+            for question in self._input_args['questions']:
+                question_dict = self._input_args['questions'][question]
+                assert question_dict['reply']
 
-            if self._type == KpiTypes.CHECKBOXES or KpiTypes.BINARY:
+            if self._type == KpiTypes.CHECKBOXES or self._type == KpiTypes.BINARY:
                 if self._type == KpiTypes.BINARY:
                     # Only one question is expected
-                    assert list(self._input_args['questions'].keys()) == 1
+                    assert len(list(self._input_args['questions'].keys())) == 1
 
-                # Only two reply options: yes, no
+                # Only two reply options: yes, no + 'reply'
                 for question in list(self._input_args['questions'].keys()):
-                    # expected 'positive': bool
-                    assert len(list(self._input_args['questions'][question])) == 1
+                    assert len(list(self._input_args['questions'][question])) == 3
 
 
 class SdfKpi(KpiBase, SdfKpiInput):
@@ -149,7 +151,7 @@ class SdfKpi(KpiBase, SdfKpiInput):
         return out
 
     def normalise(self, val: float):
-        if self._type in [KpiTypes.NUMBER, KpiTypes.NUMBERS_SET]:
+        if self._type in [KpiTypes.NUMBER, KpiTypes.NUMBERS_SET, KpiTypes.QUIZ, KpiTypes.CHECKBOXES, KpiTypes.BINARY]:
             if val < self._good_practice_thr:
                 norm = int(val * 50./self._good_practice_thr + 0.5)
             elif self._good_practice_thr < val <= self._leading_practice_thr:
